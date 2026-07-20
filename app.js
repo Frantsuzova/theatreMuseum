@@ -7,12 +7,20 @@ const audio=$('routeAudio'), audioPlay=$('audioPlay'), audioSeek=$('audioSeek'),
 const drawer=$('routeDrawer'), drawerList=$('drawerRouteList'), drawerRouteChip=$('drawerRouteChip'), drawerProgressLine=$('drawerProgressLine'), drawerProgressLabel=$('drawerProgressLabel');
 const drawerTabs=[...document.querySelectorAll('.drawer-tab')];
 const drawerPanels={points:$('drawerPanelPoints'),project:$('drawerPanelProject'),poster:$('drawerPanelPoster')};
+const prologueMenuDrawer=$('prologueMenuDrawer');
+const prologueMenuTabs=[...document.querySelectorAll('.prologue-menu-tab')];
+const prologueMenuPanels={project:$('prologueMenuProject'),poster:$('prologueMenuPoster'),contact:$('prologueMenuContact')};
+const contactModeButtons=[...document.querySelectorAll('.contact-mode')];
+const contactForms={technical:$('technicalContactForm'),feedback:$('feedbackContactForm')};
+const posterFilterButtons=[...document.querySelectorAll('.poster-filter-chip')];
+const museumEvents=[...document.querySelectorAll('.museum-event')];
+const prologueMenuBottomHint=$('prologueMenuBottomHint');
 const draftText='Черновик карты маршрута. Сейчас это единая карта с четырьмя стартовыми точками; дальше сюда можно подставить четыре отдельно размеченные карты.';
 const routes=[
- {id:1,colorClass:'c1',color:'#ffd33f',title:'1. Музей-квартира Римского-Корсакова → Театральный музей',shortTitle:'Музей-квартира Римского-Корсакова → Театральный музей',blurb:'Маршрут о творческом взаимопонимании, раннем узнавании таланта и прогулке, в которой разговор продолжается на ходу.',coord:[59.924567,30.340964]},
- {id:2,colorClass:'c2',color:'#59c2ff',title:'2. Театральный музей → Шереметевский дворец — Музей музыки',shortTitle:'Театральный музей → Шереметевский дворец — Музей музыки',blurb:'Маршрут о конфликте старого и нового театра, реформе сцены и моменте, когда художественный риск становится поступком.',coord:[59.931145,30.336659]},
- {id:3,colorClass:'c3',color:'#ce68ff',title:'3. Шереметевский дворец — Музей музыки → Музей актеров Самойловых',shortTitle:'Шереметевский дворец — Музей музыки → Музей актеров Самойловых',blurb:'Маршрут о Фонтанном доме, памяти музыкального салона и дружеской встрече, из которой рождается разговор о прошлом.',coord:[59.936012,30.345461]},
- {id:4,colorClass:'c4',color:'#7ee36a',title:'4. Музей актеров Самойловых → Музей-квартира Н.А. Римского-Корсакова',shortTitle:'Музей актеров Самойловых → Музей-квартира Н.А. Римского-Корсакова',blurb:'Маршрут о преемственности, художественном взгляде двух поколений и движении между памятью и ожиданием нового.',coord:[59.931140,30.350735]}
+ {id:1,colorClass:'c1',color:'#ffd33f',title:'1. Музей-квартира Римского-Корсакова → Театральный музей',shortTitle:'Музей-квартира Римского-Корсакова → Театральный музей',blurb:'Маршрут о творческом взаимопонимании, раннем узнавании таланта и прогулке, в которой разговор продолжается на ходу.',coord:[59.924567,30.340964],previewImg:'./assets/point-1.png',previewAlt:'Музей-квартира Н.А. Римского-Корсакова'},
+ {id:2,colorClass:'c2',color:'#59c2ff',title:'2. Театральный музей → Шереметевский дворец — Музей музыки',shortTitle:'Театральный музей → Шереметевский дворец — Музей музыки',blurb:'Маршрут о конфликте старого и нового театра, реформе сцены и моменте, когда художественный риск становится поступком.',coord:[59.931145,30.336659],previewImg:'./assets/point-2.png',previewAlt:'Театральный музей'},
+ {id:3,colorClass:'c3',color:'#ce68ff',title:'3. Шереметевский дворец — Музей музыки → Музей актеров Самойловых',shortTitle:'Шереметевский дворец — Музей музыки → Музей актеров Самойловых',blurb:'Маршрут о Фонтанном доме, памяти музыкального салона и дружеской встрече, из которой рождается разговор о прошлом.',coord:[59.936012,30.345461],previewImg:'./assets/point-3.png',previewAlt:'Шереметевский дворец — Музей музыки'},
+ {id:4,colorClass:'c4',color:'#7ee36a',title:'4. Музей актеров Самойловых → Музей-квартира Н.А. Римского-Корсакова',shortTitle:'Музей актеров Самойловых → Музей-квартира Н.А. Римского-Корсакова',blurb:'Маршрут о преемственности, художественном взгляде двух поколений и движении между памятью и ожиданием нового.',coord:[59.931140,30.350735],previewImg:'./assets/point-4.png',previewAlt:'Музей актеров Самойловых'}
 ];
 const landmarks=[
  {title:'Думская башня',coord:[59.934684,30.329620],img:'./assets/dumskaya.png'},
@@ -35,6 +43,7 @@ function statusFor(id){id=Number(id); if(passed.has(id)) return 'passed'; if(vie
 function labelFor(id){const st=statusFor(id); return st==='passed'?'пройдена':st==='viewed'?'просмотрена':'впереди'}
 function exploredCount(){return new Set([...passed,...viewed]).size}
 function show(name,source='intro'){
+ if(name!=='prologue') closePrologueMenu();
  introScreen.hidden=name!=='intro'; prologueScreen.hidden=name!=='prologue'; routesScreen.hidden=name!=='routes'; yandexScreen.hidden=name!=='yandex';
  if(name==='prologue' || name==='routes'){ updateRouteUI(); }
  if(name==='yandex'){
@@ -50,7 +59,7 @@ function updateRouteUI(){
  const r=route();
  routeTitle.textContent=r.title; routeText.textContent=r.blurb || draftText;
  pointCounter.textContent=`Точка ${r.id} из 4`; mapPointTitle.textContent=r.shortTitle; mapPointText.textContent=draftText;
- pointPreview.className=`point-preview ${r.colorClass}`; pointPreview.textContent=r.id;
+ pointPreview.className=`point-preview ${r.colorClass}`; pointPreview.innerHTML=r.previewImg?`<img src="${r.previewImg}" alt="${r.previewAlt||r.shortTitle}">`:String(r.id);
  peekRouteText.textContent=`#${r.id}`; peekPointNum.textContent=r.id; peekPointPin.className=`peek-pin ${r.colorClass}`;
  document.querySelectorAll('.pin,.tab,.route-choice').forEach(el=>el.classList.toggle('active',Number(el.dataset.route)===r.id));
  renderDrawerList(); updateMapMarkers();
@@ -117,6 +126,78 @@ function updateDrawerHint(){
    const atBottom=area.scrollTop+area.clientHeight>=area.scrollHeight-2;
    drawerBottomHint.textContent=atTop?'↕ листайте':(atBottom?'↑ листайте':'↕ листайте');
  }
+}
+
+function updatePrologueMenuHint(){
+ const scroll=$('prologueMenuScroll');
+ if(!scroll||!prologueMenuBottomHint||prologueMenuDrawer.hidden) return;
+
+ // Measure only the currently visible section and ignore the extra bottom space
+ // reserved for the hint itself. This keeps the hint hidden on compact forms
+ // that already fit completely on screen.
+ scroll.classList.remove('has-scroll-hint');
+ const activePanel=[...scroll.children].find(node=>!node.hidden);
+ const contentHeight=activePanel?activePanel.scrollHeight:0;
+ const canScroll=contentHeight>scroll.clientHeight+12;
+
+ prologueMenuBottomHint.hidden=!canScroll;
+ scroll.classList.toggle('has-scroll-hint',canScroll);
+ if(!canScroll){
+   scroll.scrollTop=0;
+   return;
+ }
+
+ const atTop=scroll.scrollTop<=2;
+ const atBottom=scroll.scrollTop+scroll.clientHeight>=scroll.scrollHeight-2;
+ prologueMenuBottomHint.querySelector('span').textContent=atTop?'↓ листайте':(atBottom?'↑ наверх':'↕ листайте');
+}
+function setPrologueMenuTab(tab){
+ prologueMenuTabs.forEach(btn=>btn.classList.toggle('active',btn.dataset.prologueTab===tab));
+ Object.entries(prologueMenuPanels).forEach(([key,panel])=>{
+   if(!panel) return;
+   panel.hidden=key!==tab;
+   panel.classList.toggle('active',key===tab);
+ });
+ const scroll=$('prologueMenuScroll');
+ if(scroll) scroll.scrollTop=0;
+ setTimeout(updatePrologueMenuHint,30);
+}
+function setPosterFilter(filter){
+ posterFilterButtons.forEach(btn=>btn.classList.toggle('active',btn.dataset.posterFilter===String(filter)));
+ museumEvents.forEach(event=>{
+   const visible=filter==='all'||event.dataset.venue===String(filter);
+   event.hidden=!visible;
+ });
+ const scroll=$('prologueMenuScroll');
+ if(scroll) scroll.scrollTop=0;
+ setTimeout(updatePrologueMenuHint,30);
+}
+function openPrologueMenu(tab='project'){
+ if(!prologueMenuDrawer) return;
+ prologueMenuDrawer.hidden=false;
+ prologueMenuDrawer.removeAttribute('hidden');
+ setPrologueMenuTab(tab);
+ requestAnimationFrame(()=>prologueMenuDrawer.classList.add('open'));
+ setTimeout(updatePrologueMenuHint,80);
+}
+function closePrologueMenu(){
+ if(!prologueMenuDrawer) return;
+ prologueMenuDrawer.classList.remove('open');
+ setTimeout(()=>{if(!prologueMenuDrawer.classList.contains('open'))prologueMenuDrawer.hidden=true},260);
+}
+function setContactMode(mode){
+ contactModeButtons.forEach(btn=>btn.classList.toggle('active',btn.dataset.contactMode===mode));
+ Object.entries(contactForms).forEach(([key,form])=>{
+   if(!form) return;
+   form.hidden=key!==mode;
+   form.classList.toggle('active',key===mode);
+ });
+ const active=contactForms[mode];
+ if(active){
+   const status=active.querySelector('.contact-form-status');
+   if(status) status.textContent='';
+ }
+ setTimeout(updatePrologueMenuHint,30);
 }
 
 function loadYandex(){
@@ -227,6 +308,9 @@ safeOn('chooseRoute','click',()=>show('prologue'));
 safeOn('goMapFromIntro','click',()=>show('yandex','intro'));
 safeOn('openRouteMap','click',()=>{show('yandex','routes'); setTimeout(()=>{updateRouteUI(); openSheet();},180);});
 safeOn('backToIntro','click',()=>show('intro'));
+safeOn('openPrologueMenu','click',()=>openPrologueMenu('project'));
+safeOn('openIntroMenu','click',()=>openPrologueMenu('project'));
+safeOn('closePrologueMenu','click',closePrologueMenu);
 safeOn('goRouteSelect','click',()=>show('routes'));
 safeOn('backToPrologue','click',()=>show('prologue'));
 safeOn('mapLogoHome','click',()=>show('intro'));
@@ -243,8 +327,20 @@ safeOn('mapBack','click',()=>changeRoute(-1));
 safeOn('nextRoute','click',()=>changeRoute(1));
 drawer.addEventListener('click',e=>{if(e.target===drawer)closeDrawer()});
 drawerTabs.forEach(b=>b.addEventListener('click',()=>setDrawerTab(b.dataset.tab)));
+prologueMenuTabs.forEach(b=>b.addEventListener('click',()=>setPrologueMenuTab(b.dataset.prologueTab)));
+posterFilterButtons.forEach(b=>b.addEventListener('click',()=>setPosterFilter(b.dataset.posterFilter)));
+contactModeButtons.forEach(b=>b.addEventListener('click',()=>setContactMode(b.dataset.contactMode)));
+if(prologueMenuDrawer) prologueMenuDrawer.addEventListener('click',e=>{if(e.target===prologueMenuDrawer)closePrologueMenu()});
+document.querySelectorAll('.demo-contact-form').forEach(form=>form.addEventListener('submit',e=>{
+ e.preventDefault();
+ const status=form.querySelector('.contact-form-status');
+ if(status) status.textContent='Спасибо! Интерфейс формы готов; отправку подключим к серверу на следующем этапе.';
+}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePrologueMenu();closeDrawer();}});
 $('drawerScrollArea').addEventListener('scroll',updateDrawerHint);
-window.addEventListener('resize',updateDrawerHint);
+const prologueMenuScroll=$('prologueMenuScroll');
+if(prologueMenuScroll) prologueMenuScroll.addEventListener('scroll',updatePrologueMenuHint);
+window.addEventListener('resize',()=>{updateDrawerHint();updatePrologueMenuHint();});
 document.querySelectorAll('.pin,.tab').forEach(el=>el.addEventListener('click',()=>selectRoute(el.dataset.route)));
 document.querySelectorAll('.route-choice').forEach(el=>el.addEventListener('click',()=>setSelectedRoute(el.dataset.route)));
 audio.addEventListener('play',()=>audioPlay.classList.add('playing'));audio.addEventListener('pause',()=>audioPlay.classList.remove('playing'));audio.addEventListener('loadedmetadata',()=>audioDuration.textContent=formatTime(audio.duration));audio.addEventListener('timeupdate',()=>{audioCurrent.textContent=formatTime(audio.currentTime);if(audio.duration)audioSeek.value=String(audio.currentTime/audio.duration*100)});audioSeek.addEventListener('input',()=>{if(audio.duration)audio.currentTime=Number(audioSeek.value)/100*audio.duration});audioPlay.addEventListener('click',toggleAudio);

@@ -15,6 +15,11 @@
       <div class="intro-bg-fog"></div>
       <div class="film-overlay"></div>
       <div class="curtain"></div>
+      <div class="intro-sponsor" aria-label="При поддержке ВТБ">
+        <span>При поддержке</span>
+        <img src="./assets/vtb-logo.png" alt="ВТБ" />
+      </div>
+      <button class="prologue-burger intro-burger" id="openIntroMenu" type="button" aria-label="Открыть меню"><span></span><span></span><span></span></button>
       <div class="geometry" aria-hidden="true">
         <div class="axis"></div>
         <div class="tri-line tri-left"></div>
@@ -54,6 +59,7 @@
           <div class="kicker">Город музыки и театров</div>
           <h2>Пролог</h2>
         </div>
+        <button class="prologue-burger" id="openPrologueMenu" type="button" aria-label="Открыть меню"><span></span><span></span><span></span></button>
       </header>
       <img class="prologue-hero" src="./assets/hero.png" alt="" />
       <main class="prologue-main">
@@ -73,6 +79,8 @@
       <footer class="prologue-actions">
         <button class="btn primary" id="goRouteSelect" type="button">Выбрать маршрут</button>
       </footer>
+
+
     </section>
 
     <section class="screen route-select-screen" id="routesScreen" hidden>
@@ -150,7 +158,7 @@
               <div class="sheet-label dark-label" id="pointCounter">Точка 1 из 4</div>
               <h3 id="mapPointTitle">1. Музей-квартира Римского-Корсакова → Театральный музей</h3>
             </div>
-            <div class="point-preview c1" id="pointPreview">1</div>
+            <div class="point-preview c1" id="pointPreview"><img src="./assets/point-1.png" alt="Музей-квартира Н.А. Римского-Корсакова"></div>
           </div>
           <p id="mapPointText">Черновик карты маршрута. Сейчас это единая карта с четырьмя стартовыми точками; дальше сюда можно подставить четыре отдельно размеченные карты.</p>
           <div class="audio-player">
@@ -205,6 +213,171 @@
         </div>
       </aside>
     </section>
+
+    <aside class="prologue-menu-drawer" id="prologueMenuDrawer" hidden>
+      <div class="prologue-menu-panel-wrap">
+        <div class="prologue-menu-head">
+          <div>
+            <div class="drawer-kicker">Город музыки и театров</div>
+            <h3>Меню</h3>
+          </div>
+          <button class="drawer-close" id="closePrologueMenu" type="button" aria-label="Закрыть">×</button>
+        </div>
+
+        <div class="prologue-menu-tabs" role="tablist" aria-label="Разделы меню">
+          <button class="prologue-menu-tab active" data-prologue-tab="project" type="button">О проекте</button>
+          <button class="prologue-menu-tab" data-prologue-tab="poster" type="button">Афиша</button>
+          <button class="prologue-menu-tab" data-prologue-tab="contact" type="button">Связаться</button>
+        </div>
+
+        <div class="prologue-menu-scroll" id="prologueMenuScroll">
+          <section class="prologue-menu-panel active" id="prologueMenuProject">
+            <div class="menu-section-label menu-section-title">О проекте</div>
+            <p>Здесь появится рассказ о проекте «Город музыки и театров»: о том, как устроены маршруты, почему город становится частью повествования и как связаны музейные коллекции, аудио и прогулка.</p>
+            <p>Пока этот раздел работает как содержательная заглушка для будущего текста команды музея.</p>
+            <div class="menu-ornament" aria-hidden="true"><span></span><b></b><b></b><span></span></div>
+          </section>
+
+          <section class="prologue-menu-panel" id="prologueMenuPoster" hidden>
+            <div class="menu-section-label menu-section-title">Что происходит в наших музеях</div>
+            <p class="menu-lead">Санкт-Петербургский государственный музей театрального и музыкального искусства объединяет пять музеев в исторических зданиях Петербурга: Шереметевский дворец — Музей музыки, Театральный музей, Музей Н. А. Римского-Корсакова, Музей актеров Самойловых и Дом-музей Ф. И. Шаляпина. Четыре из них стали основой наших маршрутов. В афише — специальные события этих площадок и промокоды проекта.</p>
+
+            <div class="poster-filter" role="group" aria-label="Фильтр афиши по площадке">
+              <button class="poster-filter-chip active" data-poster-filter="all" type="button">Все</button>
+              <button class="poster-filter-chip c1" data-poster-filter="1" type="button"><i></i>Музей Римского-Корсакова</button>
+              <button class="poster-filter-chip c2" data-poster-filter="2" type="button"><i></i>Театральный музей</button>
+              <button class="poster-filter-chip c3" data-poster-filter="3" type="button"><i></i>Шереметевский дворец</button>
+              <button class="poster-filter-chip c4" data-poster-filter="4" type="button"><i></i>Музей Самойловых</button>
+            </div>
+
+            <div class="museum-event-list" id="museumEventList">
+              <a class="museum-event c1" data-venue="1" href="#" aria-label="Открыть событие в музее-квартире Римского-Корсакова">
+                <div class="museum-event-date"><strong>24</strong><span>июля</span><em>19:00</em></div>
+                <div class="museum-event-copy"><div class="museum-event-location">Музей-квартира Римского-Корсакова</div><h5>Lorem ipsum dolor sit amet</h5><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae justo vel augue.</p></div>
+              </a>
+              <a class="museum-event c2" data-venue="2" href="#" aria-label="Открыть событие в Театральном музее">
+                <div class="museum-event-date"><strong>27</strong><span>июля</span><em>18:30</em></div>
+                <div class="museum-event-copy"><div class="museum-event-location">Театральный музей</div><h5>Lorem ipsum dolor sit amet</h5><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed posuere, justo non pretium.</p></div>
+              </a>
+              <a class="museum-event c3" data-venue="3" href="#" aria-label="Открыть событие в Шереметевском дворце">
+                <div class="museum-event-date"><strong>02</strong><span>августа</span><em>16:00</em></div>
+                <div class="museum-event-copy"><div class="museum-event-location">Шереметевский дворец</div><h5>Lorem ipsum dolor sit amet</h5><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque habitant morbi tristique.</p></div>
+              </a>
+              <a class="museum-event c4" data-venue="4" href="#" aria-label="Открыть событие в музее актеров Самойловых">
+                <div class="museum-event-date"><strong>09</strong><span>августа</span><em>15:00</em></div>
+                <div class="museum-event-copy"><div class="museum-event-location">Музей актеров Самойловых</div><h5>Lorem ipsum dolor sit amet</h5><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent commodo, neque at fermentum.</p></div>
+              </a>
+            </div>
+          </section>
+
+          <section class="prologue-menu-panel" id="prologueMenuContact" hidden>
+            <div class="menu-section-label menu-section-title">Расскажите нам</div>
+
+            <div class="contact-mode-switch" role="tablist" aria-label="Тип сообщения">
+              <button class="contact-mode active" data-contact-mode="technical" type="button">Тех. проблема</button>
+              <button class="contact-mode" data-contact-mode="feedback" type="button">Отзыв и опрос</button>
+            </div>
+
+            <form class="contact-form demo-contact-form active" id="technicalContactForm" data-contact-form="technical">
+              <label class="contact-field">
+                <span>Что случилось?</span>
+                <select name="problemType" required>
+                  <option value="" selected disabled>Выберите проблему</option>
+                  <option>Не открывается карта</option>
+                  <option>Не работает аудио</option>
+                  <option>Не определяется геолокация</option>
+                  <option>Ошибка в тексте или маршруте</option>
+                  <option>Другое</option>
+                </select>
+              </label>
+              <label class="contact-field">
+                <span>Где возникла проблема?</span>
+                <select name="screen">
+                  <option>Главная</option>
+                  <option>Пролог</option>
+                  <option>Выбор маршрута</option>
+                  <option>Карта и точки маршрута</option>
+                  <option>Меню приложения</option>
+                </select>
+              </label>
+              <label class="contact-field">
+                <span>Опишите проблему</span>
+                <textarea name="message" rows="5" placeholder="Что вы делали и что произошло?" required></textarea>
+              </label>
+              <label class="contact-field">
+                <span>Email для ответа <em>необязательно</em></span>
+                <input name="email" type="email" placeholder="name@example.com" />
+              </label>
+              <button class="contact-submit" type="submit">Сообщить о проблеме <b>→</b></button>
+              <div class="contact-form-status" aria-live="polite"></div>
+            </form>
+
+            <form class="contact-form demo-contact-form" id="feedbackContactForm" data-contact-form="feedback" hidden>
+              <fieldset class="contact-field contact-rating">
+                <legend>Как вам прогулка?</legend>
+                <div class="rating-options">
+                  <label><input type="radio" name="rating" value="1"><span>1</span></label>
+                  <label><input type="radio" name="rating" value="2"><span>2</span></label>
+                  <label><input type="radio" name="rating" value="3"><span>3</span></label>
+                  <label><input type="radio" name="rating" value="4"><span>4</span></label>
+                  <label><input type="radio" name="rating" value="5"><span>5</span></label>
+                </div>
+              </fieldset>
+              <label class="contact-field">
+                <span>Ваш отзыв</span>
+                <textarea name="feedback" rows="5" placeholder="Что понравилось? Что можно сделать лучше?"></textarea>
+              </label>
+              <div class="contact-survey-title">Небольшой опрос</div>
+              <label class="contact-field">
+                <span>Ваш возраст</span>
+                <select name="age">
+                  <option value="" selected>Не указывать</option>
+                  <option>до 18 лет</option>
+                  <option>18–24</option>
+                  <option>25–34</option>
+                  <option>35–44</option>
+                  <option>45–54</option>
+                  <option>55–64</option>
+                  <option>65+</option>
+                </select>
+              </label>
+              <label class="contact-field">
+                <span>Из какого вы города?</span>
+                <input name="city" type="text" placeholder="Например, Санкт-Петербург" />
+              </label>
+              <label class="contact-field">
+                <span>Откуда вы узнали о музее?</span>
+                <select name="museumSource">
+                  <option value="" selected>Выберите вариант</option>
+                  <option>Давно знаю музей</option>
+                  <option>Сайт музея</option>
+                  <option>Социальные сети</option>
+                  <option>Друзья или знакомые</option>
+                  <option>Туристический сервис / афиша</option>
+                  <option>Увидел(а) музей во время прогулки</option>
+                  <option>Другое</option>
+                </select>
+              </label>
+              <label class="contact-field">
+                <span>Откуда вы узнали об этом проекте?</span>
+                <select name="projectSource">
+                  <option value="" selected>Выберите вариант</option>
+                  <option>В самом музее</option>
+                  <option>Сайт музея</option>
+                  <option>Социальные сети</option>
+                  <option>QR-код в городе</option>
+                  <option>Друзья или знакомые</option>
+                  <option>Другое</option>
+                </select>
+              </label>
+              <button class="contact-submit" type="submit">Отправить отзыв <b>→</b></button>
+              <div class="contact-form-status" aria-live="polite"></div>
+            </form>
+          </section>
+        </div>
+        <div class="prologue-menu-bottom-hint" id="prologueMenuBottomHint" hidden><span>↓ листайте</span></div>
+      </div>
+    </aside>
   </main>
   <script src="./app.js"></script>
 </body>
