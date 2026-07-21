@@ -2147,3 +2147,49 @@ html,body{background:#080807 !important; font-family:Georgia,'Times New Roman',s
   .prologue-menu-scroll{padding-bottom:20px !important;}
   .prologue-menu-scroll.has-scroll-hint{padding-bottom:64px !important;}
 }
+
+/* ===== v65: prevent intro clipping on short mobile screens ===== */
+.app{
+  height:100dvh !important;
+  max-height:100dvh !important;
+  min-height:0 !important;
+}
+@supports (height:100svh){
+  .app{
+    height:100svh !important;
+    max-height:100svh !important;
+  }
+}
+
+@media(max-height:740px){
+  .intro-sponsor{
+    top:10px !important;
+    left:12px !important;
+    width:62px !important;
+    min-height:40px !important;
+    gap:3px !important;
+    font-size:7px !important;
+  }
+  .intro-sponsor img{width:52px !important;max-height:20px !important;}
+  .intro-burger{top:12px !important;right:12px !important;width:44px !important;height:44px !important;}
+  .intro-copy{top:10px !important;left:18px !important;right:18px !important;}
+  .intro-copy .logo{width:72px !important;margin-bottom:6px !important;}
+  .intro-copy h1{font-size:39px !important;line-height:.9 !important;max-width:220px !important;}
+  .intro-copy p{font-size:13px !important;line-height:1.26 !important;max-width:250px !important;margin-top:10px !important;}
+  .hero{left:-10px !important;bottom:-12px !important;height:54% !important;}
+  .focus-target{top:61.2% !important;transform:translate(-50%,-50%) scale(.90) !important;}
+  .intro-bottom{left:18px !important;right:18px !important;bottom:10px !important;gap:8px !important;}
+  .intro-bottom .book-divider{margin-top:4px !important;transform:scale(.92);transform-origin:center;}
+  .btn{height:50px !important;font-size:15px !important;}
+}
+
+@media(max-height:680px){
+  .intro-copy .logo{width:68px !important;}
+  .intro-copy h1{font-size:35px !important;max-width:200px !important;}
+  .intro-copy p{font-size:12px !important;line-height:1.22 !important;max-width:232px !important;margin-top:8px !important;}
+  .hero{left:-4px !important;bottom:-4px !important;height:49% !important;}
+  .focus-target{top:60.8% !important;transform:translate(-50%,-50%) scale(.82) !important;}
+  .intro-bottom{bottom:8px !important;gap:7px !important;}
+  .btn{height:46px !important;font-size:14px !important;}
+  .intro-bottom .book-divider{margin-top:2px !important;transform:scale(.86);}
+}
