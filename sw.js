@@ -1,4 +1,20 @@
-const CACHE='gorod-muzyki-v11';
-const ASSETS=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./assets/logo.png','./assets/intro-bg.jpg','./assets/hero.png','./assets/old-map.jpg','./assets/point-1.png','./assets/point-2.png','./assets/point-3.png','./assets/point-4.png','./assets/vtb-logo.png'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));});
-self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(cached=>cached||fetch(e.request)));});
+const CACHE_PREFIX='gorod-muzyki-';
+
+self.addEventListener('install',event=>{
+  event.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener('activate',event=>{
+  event.waitUntil(Promise.all([
+    caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith(CACHE_PREFIX)).map(key=>caches.delete(key)))),
+    self.clients.claim()
+  ]));
+});
+
+self.addEventListener('fetch',event=>{
+  const request=event.request;
+  if(request.method!=='GET') return;
+  const url=new URL(request.url);
+  if(url.origin!==self.location.origin) return;
+  event.respondWith(fetch(request,{cache:'no-store'}));
+});
