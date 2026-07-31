@@ -7682,3 +7682,9 @@ html,body{background:#080807 !important; font-family:Georgia,'Times New Roman',s
 .camera-gallery-next{
   transform:translate(calc(-50% + 14px), -50%) !important;
 }
+
+/* v63: shift gallery nav buttons further right */
+.camera-gallery-prev,
+.camera-gallery-next{
+  transform:translate(calc(-50% + 26px), -50%) !important;
+}
